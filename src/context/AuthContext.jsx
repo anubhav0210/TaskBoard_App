@@ -8,7 +8,7 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
-  // Check if user already saved in localStorage
+  // check if user already saved in localStorage
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
@@ -18,4 +18,30 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
+  
+  // Login function
+  const login = (email, password, remember) => {
+    if (email === "intern@demo.com" && password === "intern123") {
+      setIsAuthenticated(true);
+
+      // If remember me checked
+      if (remember) {
+        localStorage.setItem("auth", "true");
+      }
+
+      return true;
+    }
+    return false;
+  };
+
+  // Logout function
+  const logout = () => {
+    setIsAuthenticated(false);
+    localStorage.removeItem("auth");
+  };
+   return (
+    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
