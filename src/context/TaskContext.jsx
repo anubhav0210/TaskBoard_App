@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 const TaskContext = createContext();
 
 // Custom hook to use task context anywhere
+// eslint-disable-next-line react-refresh/only-export-components
 export function useTasks() {
   return useContext(TaskContext);
 }
@@ -19,16 +20,17 @@ export function TaskProvider({ children }) {
   const [activityLog, setActivityLog] = useState([]);
 
   // ----------------------------------------
-  // Load data safely from localStorage
+  // Load data safely from localStorage on mount
   // ----------------------------------------
   useEffect(() => {
     try {
       const storedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
       const storedLog = JSON.parse(localStorage.getItem("activityLog")) || [];
 
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setTasks(storedTasks);
       setActivityLog(storedLog);
-    } catch (error) {
+    } catch {
       console.error("Storage corrupted. Resetting...");
       localStorage.removeItem("tasks");
       localStorage.removeItem("activityLog");
@@ -71,7 +73,7 @@ export function TaskProvider({ children }) {
       priority: taskData.priority || "Low",
       dueDate: taskData.dueDate || "",
       tags: taskData.tags || [],
-      status: "Todo", // Default column
+      status: taskData.status || "Todo", // respect provided status or default to Todo
       createdAt: new Date().toISOString(),
     };
 

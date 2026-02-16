@@ -5,6 +5,9 @@ import { useState } from "react";
 import { useTasks } from "../context/TaskContext";
 import TaskForm from "./TaskForm";
 import { useDraggable } from "@dnd-kit/core";
+import { Card, Button, Typography } from "antd";
+
+const { Paragraph, Text, Title } = Typography;
 
 function TaskCard({ task }) {
   const { deleteTask } = useTasks();
@@ -15,31 +18,35 @@ function TaskCard({ task }) {
     id: task.id,
   });
 
-  const style = {
-    transform: transform
-      ? `translate(${transform.x}px, ${transform.y}px)`
-      : undefined,
-    border: "1px solid gray",
-    padding: "10px",
-    marginBottom: "10px",
-    background: "white",
-  };
+  const transformStyle = transform
+    ? { transform: `translate(${transform.x}px, ${transform.y}px)` }
+    : undefined;
 
   return (
-    <div ref={setNodeRef} className="task-card" {...listeners} {...attributes}>
-      {editing ? (
-        <TaskForm existingTask={task} closeForm={() => setEditing(false)} />
-      ) : (
-        <>
-          <h4>{task.title}</h4>
-          <p>{task.description}</p>
-          <p>Priority: {task.priority}</p>
-          <p>Due: {task.dueDate || "No due date"}</p>
+    <div ref={setNodeRef} style={transformStyle} {...listeners} {...attributes}>
+      <Card className="neo-card task-card" size="small">
+        {editing ? (
+          <TaskForm existingTask={task} closeForm={() => setEditing(false)} />
+        ) : (
+          <>
+            <Title level={5} style={{ margin: 0 }}>{task.title}</Title>
+            <Paragraph style={{ margin: '8px 0', color: 'var(--muted)' }}>{task.description}</Paragraph>
+            <div className="neo-flex" style={{ justifyContent: 'space-between' }}>
+              <Text type="secondary">Priority: {task.priority}</Text>
+              <Text type="secondary">Due: {task.dueDate || "No due date"}</Text>
+            </div>
 
-          <button onClick={() => setEditing(true)}>Edit</button>
-          <button onClick={() => deleteTask(task.id)}>Delete</button>
-        </>
-      )}
+            <div style={{ marginTop: 12, display: 'flex', gap: 8 }}>
+              <Button type="default" onClick={() => setEditing(true)}>
+                Edit
+              </Button>
+              <Button danger onClick={() => deleteTask(task.id)}>
+                Delete
+              </Button>
+            </div>
+          </>
+        )}
+      </Card>
     </div>
   );
 }

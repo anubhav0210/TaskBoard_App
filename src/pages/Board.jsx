@@ -8,12 +8,16 @@ import Column from "../components/Column";
 import { DndContext } from "@dnd-kit/core";
 import TaskForm from "../components/TaskForm";
 import ActivityLog from "../components/ActivityLog";
+import { Layout, Button, Input, Select, Space, Row, Col, Card } from "antd";
+
+const { Content } = Layout;
+const { Search } = Input;
 
 function Board() {
   const { logout } = useAuth();
-  const { resetBoard } = useTasks();
+  const { resetBoard, moveTask } = useTasks();
   const [showForm, setShowForm] = useState(false);
-   // Search / Filter / Sort state
+  // Search / Filter / Sort state
   const [search, setSearch] = useState("");
   const [filterPriority, setFilterPriority] = useState("All");
   const [sortOrder, setSortOrder] = useState("");
@@ -32,69 +36,72 @@ function Board() {
   };
 
   return (
-    <div>
-      <h2>Task Board</h2>
+    <Layout className="app-root board-container">
+      <Content>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <h2 style={{ margin: 0 }}>Task Board</h2>
 
-      <button onClick={logout}>Logout</button>
-      <button onClick={() => setShowForm(true)}>Add Task</button>
-      <button onClick={resetBoard}>Reset Board</button>
-       
-       {/* SEARCH */}
-      <input
-        type="text"
-        placeholder="Search by title"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
-
-      {/* FILTER */}
-      <select
-        value={filterPriority}
-        onChange={(e) => setFilterPriority(e.target.value)}
-      >
-        <option value="All">All Priorities</option>
-        <option value="Low">Low</option>
-        <option value="Medium">Medium</option>
-        <option value="High">High</option>
-      </select>
-
-      {/* SORT */}
-      <select
-        value={sortOrder}
-        onChange={(e) => setSortOrder(e.target.value)}
-      >
-        <option value="">No Sort</option>
-        <option value="asc">Due Date Asc</option>
-        <option value="desc">Due Date Desc</option>
-      </select>
-
-      {showForm && <TaskForm closeForm={() => setShowForm(false)} />}
-
-      {/* Drag & Drop Context */}
-      <DndContext onDragEnd={handleDragEnd}>
-        <div style={{ display: "flex", gap: "20px", marginTop: "20px" }}>
-          <Column
-            status="Todo"
-            search={search}
-            filterPriority={filterPriority}
-            sortOrder={sortOrder}
-          />
-          <Column
-            status="Doing"
-            search={search}
-            filterPriority={filterPriority}
-            sortOrder={sortOrder}
-          />
-          <Column
-            status="Done"
-            search={search}
-            filterPriority={filterPriority}
-            sortOrder={sortOrder}
-          />
+          <Space>
+            <Button onClick={logout}>Logout</Button>
+            <Button type="primary" onClick={() => setShowForm(true)}>Add Task</Button>
+            <Button danger onClick={resetBoard}>Reset</Button>
+          </Space>
         </div>
-      </DndContext>
-      <ActivityLog />
-    </div>
+
+        <Card className="neo-card" style={{ marginTop: 16 }}>
+          <Row gutter={[12, 12]} align="middle">
+            <Col xs={24} sm={12} md={10} lg={8}>
+              <Search placeholder="Search by title" allowClear value={search} onChange={(e) => setSearch(e.target.value)} />
+            </Col>
+
+            <Col xs={12} sm={6} md={4} lg={4}>
+              <Select value={filterPriority} onChange={(v) => setFilterPriority(v)} style={{ width: '100%' }}>
+                <Select.Option value="All">All Priorities</Select.Option>
+                <Select.Option value="Low">Low</Select.Option>
+                <Select.Option value="Medium">Medium</Select.Option>
+                <Select.Option value="High">High</Select.Option>
+              </Select>
+            </Col>
+
+            <Col xs={12} sm={6} md={4} lg={4}>
+              <Select value={sortOrder} onChange={(v) => setSortOrder(v)} style={{ width: '100%' }}>
+                <Select.Option value="">No Sort</Select.Option>
+                <Select.Option value="asc">Due Date Asc</Select.Option>
+                <Select.Option value="desc">Due Date Desc</Select.Option>
+              </Select>
+            </Col>
+          </Row>
+        </Card>
+
+        {showForm && <TaskForm closeForm={() => setShowForm(false)} />}
+
+        {/* Drag & Drop Context */}
+        <DndContext onDragEnd={handleDragEnd}>
+          <div className="columns" style={{ marginTop: 18 }}>
+            <Column
+              status="Todo"
+              search={search}
+              filterPriority={filterPriority}
+              sortOrder={sortOrder}
+            />
+            <Column
+              status="Doing"
+              search={search}
+              filterPriority={filterPriority}
+              sortOrder={sortOrder}
+            />
+            <Column
+              status="Done"
+              search={search}
+              filterPriority={filterPriority}
+              sortOrder={sortOrder}
+            />
+          </div>
+        </DndContext>
+
+        <ActivityLog />
+      </Content>
+    </Layout>
   );
 }
 

@@ -7,7 +7,7 @@ function ActivityLog() {
   const { activityLog } = useTasks();
 
   return (
-    <div style={{ marginTop: "40px" }}>
+    <div className="activity-log">
       <h3>Activity Log</h3>
 
       {activityLog.length === 0 && <p>No activity yet</p>}

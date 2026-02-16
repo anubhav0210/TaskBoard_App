@@ -1,0 +1,46 @@
+:root{
+  --neo-bg: #e7ecf3;
+  --neo-surface: #eef3f8;
+  --neo-shadow-light: rgba(255,255,255,0.9);
+  --neo-shadow-dark: rgba(138,150,162,0.25);
+  --neo-radius: 12px;
+  --neo-gap: 16px;
+  --neo-primary: #2563eb;
+}
+
+/* Page background tuned for neumorphism */
+body {
+  background: linear-gradient(180deg, var(--neo-bg), #f2f6fb);
+}
+
+/* Neumorphic card style */
+.neo-card {
+  background: linear-gradient(180deg, var(--neo-surface), #f7fbff);
+  border-radius: var(--neo-radius);
+  box-shadow: 8px 8px 20px var(--neo-shadow-dark), -8px -8px 20px var(--neo-shadow-light);
+  padding: 12px;
+}
+
+.neo-button {
+  border-radius: 10px;
+  padding: 8px 12px;
+  border: none;
+  background: linear-gradient(180deg, #eaf0ff, #dfe9ff);
+  box-shadow: 4px 4px 10px rgba(138,150,162,0.18), -4px -4px 10px rgba(255,255,255,0.9);
+  color: var(--neo-primary);
+  cursor: pointer;
+}
+
+.neo-button:active { transform: translateY(1px); }
+
+/* Neumorphic input */
+input.neu-input, textarea.neu-input {
+  border-radius: 10px;
+  border: none;
+  padding: 10px 12px;
+  background: linear-gradient(180deg, #f8fbff, #eef5ff);
+  box-shadow: inset 6px 6px 12px rgba(138,150,162,0.06), inset -6px -6px 12px rgba(255,255,255,0.9);
+}
+
+/* Small utility */
+.neo-flex { display:flex; gap:var(--neo-gap); align-items:center; }

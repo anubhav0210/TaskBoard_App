@@ -1,22 +1,18 @@
-import { createContext, useContext,useEffect,useState} from "react";
+import { createContext, useContext, useState } from "react";
 
 const AuthContext = createContext();
 
 // Custom hook to use auth anywhere
+// eslint-disable-next-line react-refresh/only-export-components
 export function useAuth() {
   return useContext(AuthContext);
 }
 
 export function AuthProvider({ children }) {
   // check if user already saved in localStorage
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    const savedAuth = localStorage.getItem("auth");
-    if (savedAuth === "true") {
-      setIsAuthenticated(true);
-    }
-  }, []);
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    () => localStorage.getItem("auth") === "true"
+  );
 
   
   // Login function

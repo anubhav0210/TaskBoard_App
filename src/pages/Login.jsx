@@ -1,67 +1,52 @@
 // Login.jsx
 // Static login page with validation
 
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { Card, Form, Input, Button, Checkbox, Typography, message } from "antd";
+
+const { Title } = Typography;
 
 function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  // Form state
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [remember, setRemember] = useState(false);
-  const [error, setError] = useState("");
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
+  const onFinish = (values) => {
+    const { email, password, remember } = values;
     const success = login(email, password, remember);
 
     if (success) {
       navigate("/board");
     } else {
-      setError("Invalid email or password");
+      message.error("Invalid email or password");
     }
   };
 
   return (
-    <div style={{ padding: "50px" }}>
-      <h2>Login</h2>
+    <div style={{ display: "flex", minHeight: "80vh", alignItems: "center", justifyContent: "center" }}>
+      <Card className="neo-card" style={{ width: 420 }}>
+        <Title level={3} style={{ textAlign: "center", marginBottom: 8 }}>Welcome Back</Title>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <br /><br />
+        <Form layout="vertical" name="login" onFinish={onFinish} initialValues={{ remember: true }}>
+          <Form.Item name="email" label="Email" rules={[{ required: true, message: 'Please input your email!' }, { type: 'email', message: 'Enter a valid email' }]}> 
+            <Input placeholder="you@company.com" />
+          </Form.Item>
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <br /><br />
+          <Form.Item name="password" label="Password" rules={[{ required: true, message: 'Please input your password!' }]}> 
+            <Input.Password placeholder="••••••" />
+          </Form.Item>
 
-        <label>
-          <input
-            type="checkbox"
-            onChange={(e) => setRemember(e.target.checked)}
-          />
-          Remember Me
-        </label>
+          <Form.Item name="remember" valuePropName="checked">
+            <Checkbox>Remember me</Checkbox>
+          </Form.Item>
 
-        <br /><br />
-
-        <button type="submit">Login</button>
-
-        {error && <p style={{ color: "red" }}>{error}</p>}
-      </form>
+          <Form.Item>
+            <Button type="primary" htmlType="submit" block>
+              Sign In
+            </Button>
+          </Form.Item>
+        </Form>
+      </Card>
     </div>
   );
 }
