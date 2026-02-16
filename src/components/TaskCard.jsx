@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useTasks } from "../context/TaskContext";
 import TaskForm from "./TaskForm";
 import { useDraggable } from "@dnd-kit/core";
-import { Card, Button, Typography, Popconfirm } from "antd";
+import { Card, Button, Typography } from "antd";
 
 const { Paragraph, Text, Title } = Typography;
 
@@ -22,18 +22,29 @@ function TaskCard({ task }) {
     ? { transform: `translate(${transform.x}px, ${transform.y}px)` }
     : undefined;
 
-  const handleDelete = () => {
-    deleteTask(task.id);
+  const handleDelete = (e) => {
+    e.stopPropagation();
+    if (window.confirm(`Are you sure you want to delete "${task.title}"?`)) {
+      deleteTask(task.id);
+    }
   };
 
   return (
-    <div ref={setNodeRef} style={transformStyle} {...listeners} {...attributes}>
-      <Card className="neo-card task-card" size="small">
+    <div ref={setNodeRef} style={transformStyle}>
+      <Card 
+        className="neo-card task-card" 
+        size="small"
+        style={{ cursor: 'grab' }}
+      >
         {editing ? (
           <TaskForm existingTask={task} closeForm={() => setEditing(false)} />
         ) : (
           <>
-            <Title level={5} style={{ margin: 0 }}>{task.title}</Title>
+            {/* Draggable Header */}
+            <div {...listeners} {...attributes} style={{ cursor: 'grab', marginBottom: 8 }}>
+              <Title level={5} style={{ margin: 0 }}>{task.title}</Title>
+            </div>
+
             <Paragraph style={{ margin: '8px 0', color: 'var(--muted)' }}>{task.description}</Paragraph>
             <div className="neo-flex" style={{ justifyContent: 'space-between' }}>
               <Text type="secondary">Priority: {task.priority}</Text>
@@ -41,20 +52,21 @@ function TaskCard({ task }) {
             </div>
 
             <div style={{ marginTop: 12, display: 'flex', gap: 8 }}>
-              <Button type="default" onClick={() => setEditing(true)}>
+              <Button 
+                type="default" 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setEditing(true);
+                }}
+              >
                 Edit
               </Button>
-              <Popconfirm
-                title="Delete Task"
-                description={`Are you sure you want to delete "${task.title}"?`}
-                onConfirm={handleDelete}
-                okText="Yes"
-                cancelText="No"
+              <Button 
+                danger
+                onClick={handleDelete}
               >
-                <Button danger>
-                  Delete
-                </Button>
-              </Popconfirm>
+                Delete
+              </Button>
             </div>
           </>
         )}

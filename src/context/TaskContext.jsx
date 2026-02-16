@@ -100,16 +100,12 @@ export function TaskProvider({ children }) {
   const deleteTask = (id) => {
     setTasks((prevTasks) => {
       const taskToDelete = prevTasks.find((task) => task.id === id);
-      const updatedTasks = prevTasks.filter((task) => task.id !== id);
       
-      // Log after state is updated
-      setTimeout(() => {
-        if (taskToDelete) {
-          addLog(`Task "${taskToDelete.title}" deleted`);
-        }
-      }, 0);
+      if (taskToDelete) {
+        addLog(`Task "${taskToDelete.title}" deleted`);
+      }
       
-      return updatedTasks;
+      return prevTasks.filter((task) => task.id !== id);
     });
   };
 
