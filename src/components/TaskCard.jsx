@@ -1,16 +1,32 @@
 // TaskCard.jsx
-// Displays single task card
+// Task card now draggable
 
 import { useState } from "react";
 import { useTasks } from "../context/TaskContext";
 import TaskForm from "./TaskForm";
+import { useDraggable } from "@dnd-kit/core";
 
 function TaskCard({ task }) {
   const { deleteTask } = useTasks();
   const [editing, setEditing] = useState(false);
 
+  // Make task draggable
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
+    id: task.id,
+  });
+
+  const style = {
+    transform: transform
+      ? `translate(${transform.x}px, ${transform.y}px)`
+      : undefined,
+    border: "1px solid gray",
+    padding: "10px",
+    marginBottom: "10px",
+    background: "white",
+  };
+
   return (
-    <div style={{ border: "1px solid gray", padding: "10px", marginBottom: "10px" }}>
+    <div ref={setNodeRef} className="task-card" {...listeners} {...attributes}>
       {editing ? (
         <TaskForm existingTask={task} closeForm={() => setEditing(false)} />
       ) : (
