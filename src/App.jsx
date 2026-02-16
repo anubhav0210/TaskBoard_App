@@ -5,7 +5,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Board from "./pages/Board";
 import { AuthProvider, useAuth } from "./context/AuthContext";
-
+import { TaskProvider } from "./context/TaskContext";
 // Protected Route Component
 // It prevents access to board without login
 function ProtectedRoute({ children }) {
@@ -22,6 +22,7 @@ function ProtectedRoute({ children }) {
 function App() {
   return (
     <AuthProvider>
+      <TaskProvider>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route
@@ -33,6 +34,7 @@ function App() {
           }
         />
       </Routes>
+      </TaskProvider>
     </AuthProvider>
   );
 }
