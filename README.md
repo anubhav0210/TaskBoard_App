@@ -18,7 +18,7 @@ A modern, responsive task management board with drag-and-drop functionality, bui
 
 - **Frontend**: React 19.2.0 + Vite 7.3.1
 - **State Management**: Context API (Auth + Task)
-- **Drag & Drop**: @dnd-kit/core & @dnd-kit/sortable
+- **Drag & Drop**: @dnd-kit/core & @dnd-kit/sortable 
 - **UI Library**: Ant Design 5.6.0
 - **Styling**: CSS with neumorphism theme
 - **Testing**: Vitest + React Testing Library
@@ -104,25 +104,8 @@ Current test coverage includes:
 3. Vercel auto-detects Vite config and deploys
 4. Environment: Use default settings (Vite build is pre-configured)
 
-### Deploy to Netlify
-
-1. Build the project:
-   ```bash
-   npm run build
-   ```
-2. Drag `dist/` folder to [Netlify Drop](https://app.netlify.com/drop)
-   OR connect GitHub repo directly for auto-deployment
-
-### Deploy to GitHub Pages
-
-1. Update `vite.config.js`:
-   ```js
-   export default {
-     base: '/your-repo-name/',
-     // ... rest of config
-   }
-   ```
-2. Build and push `dist/` to gh-pages branch
+## imp 
+- Drag and Drop feature only works through task name because if wanted it to work on whole card then the problem is occuring on the edit and delete button function. 
 
 ## State Management
 
